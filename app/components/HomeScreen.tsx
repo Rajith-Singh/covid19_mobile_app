@@ -15,6 +15,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCount } from '../context/CountContext';
+import { PieChart } from 'react-native-chart-kit';
+
 
 interface Item {
   id: number;
@@ -97,6 +99,24 @@ const HomeScreen: React.FC = () => {
     </View>
   );
 
+    const renderTop5Countries = () => {
+      const top5 = [...items].sort((a, b) => b.cases - a.cases).slice(0, 5);
+  
+      return (
+        <View style={styles.top5Container}>
+          <Text style={styles.sectionTitle}>Top 5 Countries</Text>
+          {top5.map((item, index) => (
+            <View key={item.id} style={styles.top5Item}>
+              <Text style={styles.top5Rank}>{index + 1}</Text>
+              <Image source={{ uri: item.flag }} style={styles.flag} />
+              <Text style={styles.top5Country}>{item.country}</Text>
+              <Text style={styles.top5Cases}>{item.cases.toLocaleString()} Cases</Text>
+            </View>
+          ))}
+        </View>
+      );
+    };
+
   const renderItem = ({ item }: { item: Item }) => (
     <TouchableOpacity
       style={styles.card}
@@ -151,23 +171,51 @@ const HomeScreen: React.FC = () => {
       </View>
       
       {globalStats && (
-        <View style={styles.globalStats}>
-          <StatCard
-            title="Total Cases"
-            value={globalStats.cases}
-            color="#FFF9EB"
-          />
-          <StatCard
-            title="Recovered"
-            value={globalStats.recovered}
-            color="#F0F9F4"
-          />
-          <StatCard
-            title="Deaths"
-            value={globalStats.deaths}
-            color="#FFF1F0"
-          />
-        </View>
+        <>
+          <View style={styles.globalStats}>
+            <StatCard title="Total Cases" value={globalStats.cases} color="#FFF9EB" />
+            <StatCard title="Recovered" value={globalStats.recovered} color="#F0F9F4" />
+            <StatCard title="Deaths" value={globalStats.deaths} color="#FFF1F0" />
+          </View>
+          <View style={styles.pieChartContainer}>
+            <PieChart
+              data={[
+                {
+                  name: 'Active',
+                  population: globalStats.active,
+                  color: '#FFC107',
+                  legendFontColor: '#333',
+                  legendFontSize: 12,
+                },
+                {
+                  name: 'Recovered',
+                  population: globalStats.recovered,
+                  color: '#4CAF50',
+                  legendFontColor: '#333',
+                  legendFontSize: 12,
+                },
+                {
+                  name: 'Deaths',
+                  population: globalStats.deaths,
+                  color: '#F44336',
+                  legendFontColor: '#333',
+                  legendFontSize: 12,
+                },
+              ]}
+              width={width - 40} // Adjust chart width
+              height={220}
+              chartConfig={{
+                backgroundColor: '#FFF',
+                backgroundGradientFrom: '#FFF',
+                backgroundGradientTo: '#FFF',
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              }}
+              accessor="population"
+              backgroundColor="transparent"
+              paddingLeft="15"
+            />
+          </View>
+        </>
       )}
       
       <Text style={styles.listTitle}>Statistics by Country</Text>
@@ -189,7 +237,12 @@ const HomeScreen: React.FC = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
-          ListHeaderComponent={ListHeader}
+          ListHeaderComponent={
+            <>
+              <ListHeader />
+              {renderTop5Countries()}
+            </>
+          }
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -394,6 +447,38 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+
+  top5Container: {
+    padding: 16,
+  },
+  top5Item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  top5Rank: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    width: 20,
+  },
+  top5Country: {
+    flex: 1,
+    fontSize: 16,
+  },
+  top5Cases: {
+    fontSize: 14,
+    color: '#888',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  pieChartContainer: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  
 });
 
 export default HomeScreen;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import LottieView from 'lottie-react-native'; // Add Lottie for animations
 import { RootStackParamList } from '../navigation/types';
 
 type GetStartedScreenProps = {
@@ -18,14 +17,10 @@ type GetStartedScreenProps = {
 };
 
 const GetStartedScreen: React.FC<GetStartedScreenProps> = ({ navigation }) => {
-  const [loading, setLoading] = useState(true); // State to handle loader
   const fadeAnim = new Animated.Value(0);
   const slideAnim = new Animated.Value(50);
 
   useEffect(() => {
-    // Show loader for 3 seconds before transitioning
-    const timer = setTimeout(() => setLoading(false), 3000);
-
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -38,27 +33,11 @@ const GetStartedScreen: React.FC<GetStartedScreenProps> = ({ navigation }) => {
         useNativeDriver: true,
       }),
     ]).start();
-
-    return () => clearTimeout(timer); // Cleanup timer
   }, []);
 
   const handleGetStarted = () => {
     navigation.navigate('Register');
   };
-
-  if (loading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <LottieView
-          source={require('../assets/loader-animation.json')} // Add your Lottie file here
-          autoPlay
-          loop
-          style={styles.loader}
-        />
-        <Text style={styles.loaderText}>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -137,23 +116,7 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8F5E9',
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5F9F7',
-  },
-  loader: {
-    width: 150,
-    height: 150,
-  },
-  loaderText: {
-    fontSize: 18,
-    color: '#2E7D52',
-    marginTop: 16,
-    fontWeight: '600',
   },
   topSection: {
     flex: 2,
@@ -172,14 +135,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1B5E20',
+    color: '#2E7D52',
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 40,
   },
   subtitle: {
     fontSize: 16,
-    color: '#66BB6A',
+    color: '#88A398',
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: 24,
@@ -206,9 +169,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   featureIcon: {
-    fontSize: 36,
+    fontSize: 32,
     marginRight: 16,
-    color: '#43A047',
   },
   featureTextContainer: {
     flex: 1,
@@ -216,12 +178,12 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1B5E20',
+    color: '#2E7D52',
     marginBottom: 4,
   },
   featureDescription: {
     fontSize: 14,
-    color: '#66BB6A',
+    color: '#88A398',
     lineHeight: 20,
   },
   bottomSection: {
@@ -229,8 +191,8 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 40 : 24,
   },
   button: {
-    backgroundColor: '#43A047',
-    borderRadius: 30,
+    backgroundColor: '#2E7D52',
+    borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     shadowColor: '#000',
@@ -238,8 +200,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
     elevation: 3,
   },
   buttonText: {
@@ -249,4 +211,6 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default GetStartedScreen;
+

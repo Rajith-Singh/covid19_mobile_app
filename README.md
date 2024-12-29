@@ -50,4 +50,4 @@ Follow these steps to run the app locally:
 
 1. Clone the repository:
    ```bash
-   
+   git clone https://github.com/Rajith-Singh/covid19_mobile_app.git

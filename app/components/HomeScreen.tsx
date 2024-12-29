@@ -17,6 +17,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCount } from '../context/CountContext';
 import { PieChart } from 'react-native-chart-kit';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/types';
+
+
+
+
 
 interface Item {
   id: number;
@@ -41,6 +47,8 @@ const HomeScreen: React.FC = () => {
   const [globalStats, setGlobalStats] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { count, incrementCount } = useCount();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
 
   const fetchData = async () => {
     try {
@@ -233,6 +241,14 @@ const HomeScreen: React.FC = () => {
       )}
 
       {renderTop5Countries()}
+
+      <TouchableOpacity
+        style={styles.advancedStatsButton}
+        onPress={() => navigation.navigate('AdvancedStatistics')}
+      >
+        <Text style={styles.advancedStatsButtonText}>View Advanced Statistics</Text>
+      </TouchableOpacity>
+
 
       <View style={styles.searchBarContainer}>
         <TextInput
@@ -530,6 +546,22 @@ const styles = StyleSheet.create({
     color: '#333',
     paddingLeft: 8,
   },
+
+  advancedStatsButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  advancedStatsButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  
 });
 
 export default HomeScreen;

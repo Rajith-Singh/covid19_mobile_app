@@ -11,12 +11,12 @@ import {
   RefreshControl,
   Platform,
   StatusBar,
+  TextInput,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCount } from '../context/CountContext';
 import { PieChart } from 'react-native-chart-kit';
-
 
 interface Item {
   id: number;
@@ -34,10 +34,12 @@ const { width } = Dimensions.get('window');
 
 const HomeScreen: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
   const [globalStats, setGlobalStats] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { count, incrementCount } = useCount();
 
   const fetchData = async () => {
@@ -60,6 +62,7 @@ const HomeScreen: React.FC = () => {
       }));
 
       setItems(data);
+      setFilteredItems(data);
       setGlobalStats(globalResponse.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -87,6 +90,17 @@ const HomeScreen: React.FC = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery === '') {
+      setFilteredItems(items);
+    } else {
+      const filtered = items.filter(item =>
+        item.country.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    }
+  }, [searchQuery, items]);
+
   const onRefresh = () => {
     setRefreshing(true);
     fetchData();
@@ -99,23 +113,23 @@ const HomeScreen: React.FC = () => {
     </View>
   );
 
-    const renderTop5Countries = () => {
-      const top5 = [...items].sort((a, b) => b.cases - a.cases).slice(0, 5);
-  
-      return (
-        <View style={styles.top5Container}>
-          <Text style={styles.sectionTitle}>Top 5 Countries</Text>
-          {top5.map((item, index) => (
-            <View key={item.id} style={styles.top5Item}>
-              <Text style={styles.top5Rank}>{index + 1}</Text>
-              <Image source={{ uri: item.flag }} style={styles.flag} />
-              <Text style={styles.top5Country}>{item.country}</Text>
-              <Text style={styles.top5Cases}>{item.cases.toLocaleString()} Cases</Text>
-            </View>
-          ))}
-        </View>
-      );
-    };
+  const renderTop5Countries = () => {
+    const top5 = [...items].sort((a, b) => b.cases - a.cases).slice(0, 5);
+
+    return (
+      <View style={styles.top5Container}>
+        <Text style={styles.sectionTitle}>Top 5 Countries</Text>
+        {top5.map((item, index) => (
+          <View key={item.id} style={styles.top5Item}>
+            <Text style={styles.top5Rank}>{index + 1}</Text>
+            <Image source={{ uri: item.flag }} style={styles.flag} />
+            <Text style={styles.top5Country}>{item.country}</Text>
+            <Text style={styles.top5Cases}>{item.cases.toLocaleString()} Cases</Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
 
   const renderItem = ({ item }: { item: Item }) => (
     <TouchableOpacity
@@ -169,7 +183,7 @@ const HomeScreen: React.FC = () => {
         <Text style={styles.greeting}>Hi {username} 👋</Text>
         <Text style={styles.subGreeting}>Stay informed about COVID-19</Text>
       </View>
-      
+
       {globalStats && (
         <>
           <View style={styles.globalStats}>
@@ -217,7 +231,19 @@ const HomeScreen: React.FC = () => {
           </View>
         </>
       )}
-      
+
+      {renderTop5Countries()}
+
+      <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.searchBarInput}
+          placeholder="Search by country name..."
+          placeholderTextColor="#88A398"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+
       <Text style={styles.listTitle}>Statistics by Country</Text>
     </View>
   );
@@ -233,14 +259,14 @@ const HomeScreen: React.FC = () => {
         </View>
       ) : (
         <FlatList
-          data={items}
+          data={filteredItems}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
           ListHeaderComponent={
             <>
               <ListHeader />
-              {renderTop5Countries()}
+              
             </>
           }
           refreshControl={
@@ -447,7 +473,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-
   top5Container: {
     padding: 16,
   },
@@ -478,7 +503,33 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     alignItems: 'center',
   },
-  
+  searchBarContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  searchBarInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    paddingLeft: 8,
+  },
 });
 
 export default HomeScreen;

@@ -33,7 +33,7 @@ The **Corona Tracker App** provides users with a user-friendly interface to trac
 
 ### Corona Statistics 📊
 - Fetches COVID-19 data from a public API (e.g., `https://api.covid19api.com/`).
-- Displays country-specific details, including confirmed cases, deaths, and recoveries.
+- Displa[]()ys country-specific details, including confirmed cases, deaths, and recoveries.
 - Information is displayed in a card view format with status tags, titles, and descriptions.
 
 ### Floating Button 🦸

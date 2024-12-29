@@ -195,9 +195,9 @@ const HomeScreen: React.FC = () => {
       {globalStats && (
         <>
           <View style={styles.globalStats}>
-            <StatCard title="Total Cases" value={globalStats.cases} color="#FFF9EB" />
-            <StatCard title="Recovered" value={globalStats.recovered} color="#F0F9F4" />
-            <StatCard title="Deaths" value={globalStats.deaths} color="#FFF1F0" />
+            <StatCard title="Total Cases" value={globalStats.cases} color="#1E1E1E" />
+            <StatCard title="Recovered" value={globalStats.recovered} color="#1E1E1E" />
+            <StatCard title="Deaths" value={globalStats.deaths} color="#1E1E1E" />
           </View>
           <View style={styles.pieChartContainer}>
             <PieChart
@@ -205,22 +205,22 @@ const HomeScreen: React.FC = () => {
                 {
                   name: 'Active',
                   population: globalStats.active,
-                  color: '#FFC107',
-                  legendFontColor: '#333',
+                  color: '#FFC107', // Yellow for active cases
+                  legendFontColor: '#FFFFFF', // Updated to white
                   legendFontSize: 12,
                 },
                 {
                   name: 'Recovered',
                   population: globalStats.recovered,
-                  color: '#4CAF50',
-                  legendFontColor: '#333',
+                  color: '#4CAF50', // Green for recovered
+                  legendFontColor: '#FFFFFF', // Updated to white
                   legendFontSize: 12,
                 },
                 {
                   name: 'Deaths',
                   population: globalStats.deaths,
-                  color: '#F44336',
-                  legendFontColor: '#333',
+                  color: '#D50000', // Red for deaths
+                  legendFontColor: '#FFFFFF', // Updated to white
                   legendFontSize: 12,
                 },
               ]}
@@ -301,20 +301,20 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Updated to black
   },
   header: {
     padding: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 16,
   },
   greetingContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for cards
     padding: 20,
     borderRadius: 16,
     marginBottom: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#2E7D52',
+        shadowColor: '#FF6F00',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
@@ -327,11 +327,11 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   subGreeting: {
     fontSize: 16,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     marginTop: 4,
   },
   globalStats: {
@@ -344,6 +344,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     marginHorizontal: 4,
+    backgroundColor: '#1E1E1E', // Darker background for cards
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -359,17 +360,17 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
     marginBottom: 4,
   },
   statTitle: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
   },
   listTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
     marginBottom: 16,
   },
   loadingContainer: {
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     fontSize: 16,
   },
   list: {
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for cards
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   flagContainer: {
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Black for the flag container
     borderRadius: 8,
     padding: 4,
     marginRight: 12,
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
   country: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   statsGrid: {
     flexDirection: 'row',
@@ -437,36 +438,36 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     marginBottom: 4,
   },
   statNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   recoveredText: {
-    color: '#2E7D52',
+    color: '#FF6F00', // Accent color
   },
   deathsText: {
-    color: '#FF4545',
+    color: '#D50000', // Red for deaths
   },
   todayStats: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(46, 125, 82, 0.1)',
+    borderTopColor: 'rgba(255, 111, 0, 0.1)', // Subtle border in orange
   },
   todayText: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FFFFFF', // White text
     textAlign: 'center',
   },
   floatingButton: {
     position: 'absolute',
     bottom: 24,
     right: 24,
-    backgroundColor: '#2E7D52',
+    backgroundColor: '#FF6F00', // Accent color
     width: 56,
     height: 56,
     borderRadius: 28,
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#2E7D52',
+        shadowColor: '#FF6F00',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
     }),
   },
   floatingButtonText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF', // White text
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -500,20 +501,23 @@ const styles = StyleSheet.create({
   top5Rank: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#FFFFFF', // White text
     width: 20,
   },
   top5Country: {
     flex: 1,
     fontSize: 16,
+    color: '#FFFFFF', // White text
   },
   top5Cases: {
     fontSize: 14,
-    color: '#888',
+    color: '#FF6F00', // Accent color
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#FFFFFF', // White text
   },
   pieChartContainer: {
     marginBottom: 24,
@@ -523,7 +527,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for the search bar
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
@@ -543,12 +547,11 @@ const styles = StyleSheet.create({
   searchBarInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: '#FFFFFF', // White text
     paddingLeft: 8,
   },
-
   advancedStatsButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#FF6F00', // Accent color
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 20,
@@ -558,10 +561,10 @@ const styles = StyleSheet.create({
   },
   advancedStatsButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#FFFFFF', // White text
     fontWeight: 'bold',
   },
-  
 });
+
 
 export default HomeScreen;

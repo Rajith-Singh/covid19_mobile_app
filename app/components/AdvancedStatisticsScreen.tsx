@@ -19,10 +19,11 @@ const AdvancedStatisticsScreen: React.FC = () => {
           width={width - 40}
           height={220}
           chartConfig={{
-            backgroundColor: '#FFF',
-            backgroundGradientFrom: '#FFF',
-            backgroundGradientTo: '#FFF',
-            color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+            backgroundColor: '#000000', // Black background
+            backgroundGradientFrom: '#1E1E1E', // Dark gradient
+            backgroundGradientTo: '#1E1E1E', // Dark gradient
+            color: (opacity = 1) => `rgba(255, 111, 0, ${opacity})`, // Orange lines
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White labels
           }}
           style={styles.chart}
         />
@@ -40,11 +41,11 @@ const AdvancedStatisticsScreen: React.FC = () => {
           strokeWidth={16}
           radius={32}
           chartConfig={{
-            backgroundColor: '#FFF',
-            backgroundGradientFrom: '#FFF',
-            backgroundGradientTo: '#FFF',
-            color: (opacity = 1) => `rgba(34, 128, 176, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            backgroundColor: '#000000', // Black background
+            backgroundGradientFrom: '#1E1E1E', // Dark gradient
+            backgroundGradientTo: '#1E1E1E', // Dark gradient
+            color: (opacity = 1) => `rgba(255, 111, 0, ${opacity})`, // Orange for progress
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White labels
           }}
           hideLegend={false}
           style={styles.chart}
@@ -58,32 +59,32 @@ const AdvancedStatisticsScreen: React.FC = () => {
             {
               name: 'Active',
               population: 5000,
-              color: '#FFC107',
-              legendFontColor: '#333',
+              color: '#FF6F00', // Orange for active
+              legendFontColor: '#FFFFFF', // White for legend text
               legendFontSize: 12,
             },
             {
               name: 'Recovered',
               population: 15000,
-              color: '#4CAF50',
-              legendFontColor: '#333',
+              color: '#4CAF50', // Green for recovered
+              legendFontColor: '#FFFFFF', // White for legend text
               legendFontSize: 12,
             },
             {
               name: 'Deaths',
               population: 2000,
-              color: '#F44336',
-              legendFontColor: '#333',
+              color: '#D50000', // Red for deaths
+              legendFontColor: '#FFFFFF', // White for legend text
               legendFontSize: 12,
             },
           ]}
           width={width - 40}
           height={220}
           chartConfig={{
-            backgroundColor: '#FFF',
-            backgroundGradientFrom: '#FFF',
-            backgroundGradientTo: '#FFF',
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            backgroundColor: '#000000', // Black background
+            backgroundGradientFrom: '#1E1E1E', // Dark gradient
+            backgroundGradientTo: '#1E1E1E', // Dark gradient
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White lines
           }}
           accessor="population"
           backgroundColor="transparent"
@@ -97,13 +98,13 @@ const AdvancedStatisticsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Black background
     padding: 16,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   chart: {
     borderRadius: 16,

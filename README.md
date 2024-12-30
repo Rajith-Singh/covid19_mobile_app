@@ -47,11 +47,11 @@ The **CoviTrack App** provides users with a user-friendly interface to track the
  
 ## Installation ⚙️
 
-**React Native: For building the cross-platform app.**
-**TypeScript: For strong typing and code maintainability.**
-**REST APIs: For fetching real-time COVID-19 data.**
-**Context API: For state management.**
-**React Navigation: For seamless app navigation.**
+**React Native: For building the cross-platform app.**<br>
+**TypeScript: For strong typing and code maintainability.**<br>
+**REST APIs: For fetching real-time COVID-19 data.**<br>
+**Context API: For state management.**<br>
+**React Navigation: For seamless app navigation.**<br>
 **Chart Libraries: For data visualization.**
 
 Follow these steps to run the app locally:
@@ -62,9 +62,9 @@ Follow these steps to run the app locally:
 
 ## Usage 🔧
 
-**Register/Login: Sign up or log in to access personalized features.**
-**Track Data: Explore real-time statistics for any country or globally.**
-**Visualize Trends: View analytics and trends through charts.**
+**Register/Login: Sign up or log in to access personalized features.**<br>
+**Track Data: Explore real-time statistics for any country or globally.**<br>
+**Visualize Trends: View analytics and trends through charts.**<br>
 
 ## Contributing 🤝
 

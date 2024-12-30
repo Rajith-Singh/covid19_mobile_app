@@ -70,7 +70,7 @@ Follow these steps to run the app locally:
 
 **Contributions are welcome! Please follow these steps:**
 
-Fork the repository.
-Create a feature branch.
-Commit your changes.
-Open a pull request.
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a pull request.

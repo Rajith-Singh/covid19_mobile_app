@@ -15,8 +15,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
-// import { LoginFormData, FormErrors } from '../types/auth.types';
-// import { MOCK_USER } from '../constants/mockData';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -24,13 +22,11 @@ type LoginScreenProps = {
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-
-  
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const isValidEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
@@ -66,13 +62,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-      >
+      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/login-logo.jpeg')}
+            source={require('../assets/covid-icon.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -85,27 +78,26 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email</Text>
             <TextInput
-              style={[styles.input, styles.inputError]}
+              style={styles.input}
               value={formData.email}
-               onChangeText={(text) => setFormData({ ...formData, email: text })}
+              onChangeText={(text) => setFormData({ ...formData, email: text })}
               placeholder="Enter your email"
-              placeholderTextColor="#88A398"
+              placeholderTextColor="#888888"
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
             />
-           
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
             <View style={styles.passwordContainer}>
               <TextInput
-                style={[styles.input, styles.passwordInput, styles.inputError]}
+                style={styles.input}
                 value={formData.password}
-               onChangeText={(text) => setFormData({ ...formData, password: text })}
+                onChangeText={(text) => setFormData({ ...formData, password: text })}
                 placeholder="Enter your password"
-                placeholderTextColor="#88A398"
+                placeholderTextColor="#888888"
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity
@@ -115,7 +107,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <Text>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
               </TouchableOpacity>
             </View>
-            
           </View>
 
           <TouchableOpacity style={styles.forgotPassword}>
@@ -128,7 +119,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color="#FFFFFF" />
             ) : (
               <Text style={styles.buttonText}>Login</Text>
             )}
@@ -149,7 +140,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -169,13 +160,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF',
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#88A398',
+    color: '#FF6F00',
     marginBottom: 32,
     textAlign: 'center',
   },
@@ -184,55 +175,44 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#2E7D52',
+    color: '#FFFFFF',
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E',
     borderWidth: 1,
-    borderColor: '#D4E5DE',
+    borderColor: '#FF6F00',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    color: '#2E7D52',
-  },
-  inputError: {
-    borderColor: '#FF6B6B',
+    color: '#FFFFFF',
   },
   passwordContainer: {
     position: 'relative',
-  },
-  passwordInput: {
-    paddingRight: 50,
   },
   eyeIcon: {
     position: 'absolute',
     right: 16,
     top: 16,
   },
-  errorText: {
-    color: '#FF6B6B',
-    fontSize: 14,
-    marginTop: 4,
-  },
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 24,
   },
   forgotPasswordText: {
-    color: '#2E7D52',
+    color: '#FF6F00',
     fontSize: 14,
   },
   button: {
-    backgroundColor: '#2E7D52',
+    backgroundColor: '#FF6F00',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     marginBottom: 16,
   },
   buttonDisabled: {
-    backgroundColor: '#88A398',
+    backgroundColor: '#888888',
   },
   buttonText: {
     color: '#FFFFFF',
@@ -245,11 +225,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerText: {
-    color: '#88A398',
+    color: '#FFFFFF',
     fontSize: 14,
   },
   registerLink: {
-    color: '#2E7D52',
+    color: '#FF6F00',
     fontSize: 14,
     fontWeight: 'bold',
   },

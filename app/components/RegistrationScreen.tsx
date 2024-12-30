@@ -204,7 +204,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Updated to black
   },
   scrollContainer: {
     flexGrow: 1,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // Updated to white
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -233,36 +233,36 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#2E7D52',
+    color: '#FFFFFF', // Updated to white
     marginBottom: 8,
     fontWeight: '500',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for inputs
     borderWidth: 1,
-    borderColor: '#D4E5DE',
+    borderColor: '#FF6F00', // Updated to orange
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    color: '#2E7D52',
+    color: '#FFFFFF', // Text color white
   },
   inputError: {
-    borderColor: '#FF6B6B',
+    borderColor: '#FF6B6B', // Error color red
   },
   errorText: {
-    color: '#FF6B6B',
+    color: '#FF6B6B', // Error text color red
     fontSize: 14,
     marginTop: 4,
   },
   button: {
-    backgroundColor: '#2E7D52',
+    backgroundColor: '#FF6F00', // Updated to orange
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     marginBottom: 16,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF', // Text color white
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -272,14 +272,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginText: {
-    color: '#88A398',
+    color: '#FFFFFF', // Text color white
     fontSize: 14,
   },
   loginLink: {
-    color: '#2E7D52',
+    color: '#FF6F00', // Updated to orange
     fontSize: 14,
     fontWeight: 'bold',
   },
 });
+
 
 export default RegisterScreen;

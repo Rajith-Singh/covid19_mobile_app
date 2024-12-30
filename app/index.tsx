@@ -5,23 +5,26 @@ import { RootStackParamList } from './navigation/types';
 import RegisterScreen from './components/RegistrationScreen';
 import GetStartedScreen from './components/GetStartedScreen';
 import HomeScreen from './components/HomeScreen';
+import AdvancedStatisticsScreen from './components/AdvancedStatisticsScreen';
 import { CountProvider } from './context/CountContext';
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Index: React.FC = () => {
   return (
     <CountProvider>
-    <Stack.Navigator
-      initialRouteName="GetStarted"
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="GetStarted" component={GetStartedScreen}  />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="GetStarted"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="GetStarted" component={GetStartedScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="AdvancedStatistics" component={AdvancedStatisticsScreen} />
+      </Stack.Navigator>
     </CountProvider>
   );
 };

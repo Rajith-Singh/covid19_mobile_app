@@ -11,10 +11,18 @@ import {
   RefreshControl,
   Platform,
   StatusBar,
+  TextInput,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCount } from '../context/CountContext';
+import { PieChart } from 'react-native-chart-kit';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/types';
+
+
+
+
 
 interface Item {
   id: number;
@@ -32,11 +40,15 @@ const { width } = Dimensions.get('window');
 
 const HomeScreen: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
   const [globalStats, setGlobalStats] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { count, incrementCount } = useCount();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
 
   const fetchData = async () => {
     try {
@@ -58,6 +70,7 @@ const HomeScreen: React.FC = () => {
       }));
 
       setItems(data);
+      setFilteredItems(data);
       setGlobalStats(globalResponse.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -85,6 +98,17 @@ const HomeScreen: React.FC = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery === '') {
+      setFilteredItems(items);
+    } else {
+      const filtered = items.filter(item =>
+        item.country.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    }
+  }, [searchQuery, items]);
+
   const onRefresh = () => {
     setRefreshing(true);
     fetchData();
@@ -96,6 +120,24 @@ const HomeScreen: React.FC = () => {
       <Text style={styles.statTitle}>{title}</Text>
     </View>
   );
+
+  const renderTop5Countries = () => {
+    const top5 = [...items].sort((a, b) => b.cases - a.cases).slice(0, 5);
+
+    return (
+      <View style={styles.top5Container}>
+        <Text style={styles.sectionTitle}>Top 5 Countries</Text>
+        {top5.map((item, index) => (
+          <View key={item.id} style={styles.top5Item}>
+            <Text style={styles.top5Rank}>{index + 1}</Text>
+            <Image source={{ uri: item.flag }} style={styles.flag} />
+            <Text style={styles.top5Country}>{item.country}</Text>
+            <Text style={styles.top5Cases}>{item.cases.toLocaleString()} Cases</Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
 
   const renderItem = ({ item }: { item: Item }) => (
     <TouchableOpacity
@@ -149,27 +191,75 @@ const HomeScreen: React.FC = () => {
         <Text style={styles.greeting}>Hi {username} 👋</Text>
         <Text style={styles.subGreeting}>Stay informed about COVID-19</Text>
       </View>
-      
+
       {globalStats && (
-        <View style={styles.globalStats}>
-          <StatCard
-            title="Total Cases"
-            value={globalStats.cases}
-            color="#FFF9EB"
-          />
-          <StatCard
-            title="Recovered"
-            value={globalStats.recovered}
-            color="#F0F9F4"
-          />
-          <StatCard
-            title="Deaths"
-            value={globalStats.deaths}
-            color="#FFF1F0"
-          />
-        </View>
+        <>
+          <View style={styles.globalStats}>
+            <StatCard title="Total Cases" value={globalStats.cases} color="#1E1E1E" />
+            <StatCard title="Recovered" value={globalStats.recovered} color="#1E1E1E" />
+            <StatCard title="Deaths" value={globalStats.deaths} color="#1E1E1E" />
+          </View>
+          <View style={styles.pieChartContainer}>
+            <PieChart
+              data={[
+                {
+                  name: 'Active',
+                  population: globalStats.active,
+                  color: '#FFC107', // Yellow for active cases
+                  legendFontColor: '#FFFFFF', // Updated to white
+                  legendFontSize: 12,
+                },
+                {
+                  name: 'Recovered',
+                  population: globalStats.recovered,
+                  color: '#4CAF50', // Green for recovered
+                  legendFontColor: '#FFFFFF', // Updated to white
+                  legendFontSize: 12,
+                },
+                {
+                  name: 'Deaths',
+                  population: globalStats.deaths,
+                  color: '#D50000', // Red for deaths
+                  legendFontColor: '#FFFFFF', // Updated to white
+                  legendFontSize: 12,
+                },
+              ]}
+              width={width - 40} // Adjust chart width
+              height={220}
+              chartConfig={{
+                backgroundColor: '#FFF',
+                backgroundGradientFrom: '#FFF',
+                backgroundGradientTo: '#FFF',
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              }}
+              accessor="population"
+              backgroundColor="transparent"
+              paddingLeft="15"
+            />
+          </View>
+        </>
       )}
-      
+
+      {renderTop5Countries()}
+
+      <TouchableOpacity
+        style={styles.advancedStatsButton}
+        onPress={() => navigation.navigate('AdvancedStatistics')}
+      >
+        <Text style={styles.advancedStatsButtonText}>View Advanced Statistics</Text>
+      </TouchableOpacity>
+
+
+      <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.searchBarInput}
+          placeholder="Search by country name..."
+          placeholderTextColor="#88A398"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+
       <Text style={styles.listTitle}>Statistics by Country</Text>
     </View>
   );
@@ -185,11 +275,16 @@ const HomeScreen: React.FC = () => {
         </View>
       ) : (
         <FlatList
-          data={items}
+          data={filteredItems}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
-          ListHeaderComponent={ListHeader}
+          ListHeaderComponent={
+            <>
+              <ListHeader />
+              
+            </>
+          }
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -206,20 +301,20 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Updated to black
   },
   header: {
     padding: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 16,
   },
   greetingContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for cards
     padding: 20,
     borderRadius: 16,
     marginBottom: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#2E7D52',
+        shadowColor: '#FF6F00',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
@@ -232,11 +327,11 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   subGreeting: {
     fontSize: 16,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     marginTop: 4,
   },
   globalStats: {
@@ -249,6 +344,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     marginHorizontal: 4,
+    backgroundColor: '#1E1E1E', // Darker background for cards
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -264,17 +360,17 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
     marginBottom: 4,
   },
   statTitle: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
   },
   listTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
     marginBottom: 16,
   },
   loadingContainer: {
@@ -284,7 +380,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     fontSize: 16,
   },
   list: {
@@ -294,7 +390,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Darker background for cards
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -316,7 +412,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   flagContainer: {
-    backgroundColor: '#F5F9F7',
+    backgroundColor: '#000000', // Black for the flag container
     borderRadius: 8,
     padding: 4,
     marginRight: 12,
@@ -329,7 +425,7 @@ const styles = StyleSheet.create({
   country: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   statsGrid: {
     flexDirection: 'row',
@@ -342,36 +438,36 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FF6F00', // Accent color
     marginBottom: 4,
   },
   statNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2E7D52',
+    color: '#FFFFFF', // White text
   },
   recoveredText: {
-    color: '#2E7D52',
+    color: '#FF6F00', // Accent color
   },
   deathsText: {
-    color: '#FF4545',
+    color: '#D50000', // Red for deaths
   },
   todayStats: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(46, 125, 82, 0.1)',
+    borderTopColor: 'rgba(255, 111, 0, 0.1)', // Subtle border in orange
   },
   todayText: {
     fontSize: 12,
-    color: '#88A398',
+    color: '#FFFFFF', // White text
     textAlign: 'center',
   },
   floatingButton: {
     position: 'absolute',
     bottom: 24,
     right: 24,
-    backgroundColor: '#2E7D52',
+    backgroundColor: '#FF6F00', // Accent color
     width: 56,
     height: 56,
     borderRadius: 28,
@@ -379,7 +475,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#2E7D52',
+        shadowColor: '#FF6F00',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -390,10 +486,85 @@ const styles = StyleSheet.create({
     }),
   },
   floatingButtonText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF', // White text
     fontSize: 18,
     fontWeight: 'bold',
   },
+  top5Container: {
+    padding: 16,
+  },
+  top5Item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  top5Rank: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF', // White text
+    width: 20,
+  },
+  top5Country: {
+    flex: 1,
+    fontSize: 16,
+    color: '#FFFFFF', // White text
+  },
+  top5Cases: {
+    fontSize: 14,
+    color: '#FF6F00', // Accent color
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#FFFFFF', // White text
+  },
+  pieChartContainer: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  searchBarContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 20,
+    backgroundColor: '#1E1E1E', // Darker background for the search bar
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  searchBarInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#FFFFFF', // White text
+    paddingLeft: 8,
+  },
+  advancedStatsButton: {
+    backgroundColor: '#FF6F00', // Accent color
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  advancedStatsButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF', // White text
+    fontWeight: 'bold',
+  },
 });
+
 
 export default HomeScreen;

@@ -3,58 +3,54 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  TouchableHighlight,
   Image,
   Dimensions,
   Animated,
   Platform,
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
+
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import LottieView from 'lottie-react-native'; // Add Lottie for animations
 import { RootStackParamList } from '../navigation/types';
+import { StatusBar } from 'react-native';
 
 type GetStartedScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'GetStarted'>;
 };
 
 const GetStartedScreen: React.FC<GetStartedScreenProps> = ({ navigation }) => {
-  const [loading, setLoading] = useState(true); // State to handle loader
   const fadeAnim = new Animated.Value(0);
   const slideAnim = new Animated.Value(50);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Show loader for 3 seconds before transitioning
-    const timer = setTimeout(() => setLoading(false), 3000);
-
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 1200,
         useNativeDriver: true,
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
-        duration: 800,
+        duration: 1000,
         useNativeDriver: true,
       }),
     ]).start();
 
-    return () => clearTimeout(timer); // Cleanup timer
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleGetStarted = () => {
     navigation.navigate('Register');
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <LottieView
-          source={require('../assets/loader-animation.json')} // Add your Lottie file here
-          autoPlay
-          loop
-          style={styles.loader}
-        />
+        <ActivityIndicator size="large" color="#FF6F00" />
         <Text style={styles.loaderText}>Loading...</Text>
       </View>
     );
@@ -62,55 +58,61 @@ const GetStartedScreen: React.FC<GetStartedScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Image
-          source={require('../assets/covid-icon.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Animated.View
-          style={[
-            styles.textContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
-        >
-          <Text style={styles.title}>Stay Updated with{'\n'}COVID-19 Stats</Text>
-          <Text style={styles.subtitle}>
-            Get real-time updates and statistics about COVID-19 cases worldwide.
-            Stay informed and stay safe.
-          </Text>
-        </Animated.View>
-      </View>
+      <StatusBar hidden />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Top Section */}
+        <View style={styles.topSection}>
+          <Animated.Image
+            source={require('../assets/covid-icon.png')}
+            style={[
+              styles.logo,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
+            resizeMode="contain"
+          />
+          <Animated.View
+            style={[
+              styles.textContainer,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
+          >
+            <Text style={styles.title}>Stay Ahead of COVID-19 Updates</Text>
+            <Text style={styles.subtitle}>
+              Track global cases, recoveries, and vaccinations with ease. Your trusted source for accurate data.
+            </Text>
+          </Animated.View>
+        </View>
 
-      <View style={styles.featuresContainer}>
-        <FeatureItem
-          icon="📊"
-          title="Real-time Statistics"
-          description="Access up-to-date COVID-19 statistics from reliable sources"
-        />
-        <FeatureItem
-          icon="🌍"
-          title="Global Coverage"
-          description="Track cases, recoveries, and vaccinations worldwide"
-        />
-        <FeatureItem
-          icon="🔔"
-          title="Important Updates"
-          description="Receive notifications about significant changes in your area"
-        />
-      </View>
+        {/* Features Section */}
+        <View style={styles.featuresContainer}>
+          <FeatureItem
+            icon="📊"
+            title="Live Statistics"
+            description="Get real-time COVID-19 data at your fingertips."
+          />
+          <FeatureItem
+            icon="🌍"
+            title="Worldwide Coverage"
+            description="Stay updated with cases from every corner of the globe."
+          />
+        </View>
+      </ScrollView>
 
-      <View style={styles.bottomSection}>
-        <TouchableOpacity
-          style={styles.button}
+      {/* Fixed Get Started Button */}
+      <View style={styles.fixedButtonContainer}>
+        <TouchableHighlight
+          style={styles.getStartedButton}
+          underlayColor="#FF3D00"
           onPress={handleGetStarted}
-          activeOpacity={0.8}
         >
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
+          <Text style={styles.getStartedButtonText}>Get Started</Text>
+        </TouchableHighlight>
       </View>
     </View>
   );
@@ -132,83 +134,82 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ icon, title, description }) =
   </View>
 );
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#000000',
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F9F7',
-  },
-  loader: {
-    width: 150,
-    height: 150,
+    backgroundColor: '#000000',
   },
   loaderText: {
-    fontSize: 18,
-    color: '#2E7D52',
     marginTop: 16,
+    fontSize: 16,
+    color: '#FF6F00',
     fontWeight: '600',
   },
   topSection: {
-    flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    backgroundColor: '#1E1E1E',
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    height: height * 0.5,
   },
   logo: {
-    width: width * 0.5,
-    height: width * 0.5,
-    marginBottom: 24,
+    width: width * 0.4,
+    height: width * 0.4,
+    marginBottom: 16,
   },
   textContainer: {
     alignItems: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#1B5E20',
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 40,
+    marginBottom: 12,
+    lineHeight: 38,
   },
   subtitle: {
     fontSize: 16,
-    color: '#66BB6A',
+    color: '#FFFFFF',
     textAlign: 'center',
-    lineHeight: 24,
     paddingHorizontal: 24,
+    lineHeight: 24,
   },
   featuresContainer: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    marginTop: 16,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 24,
-    backgroundColor: '#FFFFFF',
+    marginBottom: 20,
+    backgroundColor: '#1E1E1E',
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 15,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 4,
     elevation: 3,
   },
   featureIcon: {
-    fontSize: 36,
+    fontSize: 32,
     marginRight: 16,
-    color: '#43A047',
+    color: '#FF6F00',
   },
   featureTextContainer: {
     flex: 1,
@@ -216,33 +217,33 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1B5E20',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   featureDescription: {
     fontSize: 14,
-    color: '#66BB6A',
+    color: '#FFFFFF',
     lineHeight: 20,
   },
-  bottomSection: {
-    padding: 24,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 24,
-  },
-  button: {
-    backgroundColor: '#43A047',
-    borderRadius: 30,
-    padding: 16,
+  fixedButtonContainer: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 20 : 10,
+    left: 0,
+    right: 0,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
   },
-  buttonText: {
+  getStartedButton: {
+    backgroundColor: '#FF6F00',
+    borderRadius: 30,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  getStartedButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
@@ -250,3 +251,4 @@ const styles = StyleSheet.create({
 });
 
 export default GetStartedScreen;
+

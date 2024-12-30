@@ -1,4 +1,4 @@
-# Healthcare App - Corona Tracker 💉🌍
+# CoviTrack - Corona Tracker 💉🌍
 
 This app provides up-to-date information about COVID-19 statistics in various countries. Users can view the number of cases, recoveries, and deaths globally and for specific countries. The app also includes a simple user authentication system, allowing users to register and log in to track their progress and view statistics.
 
@@ -15,7 +15,7 @@ This app provides up-to-date information about COVID-19 statistics in various co
 
 ## Project Description 📝
 
-The **Corona Tracker App** provides users with a user-friendly interface to track the latest COVID-19 statistics across various countries. The app fetches data from a publicly available API to display critical health data such as confirmed cases, recoveries, and deaths for each country.
+The **CoviTrack App** provides users with a user-friendly interface to track the latest COVID-19 statistics across various countries. The app fetches data from a publicly available API to display critical health data such as confirmed cases, recoveries, and deaths for each country.
 
 ### Features:
 - View real-time COVID-19 statistics for any country 🌐.

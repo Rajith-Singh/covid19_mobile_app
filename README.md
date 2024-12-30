@@ -3,15 +3,14 @@
 This app provides up-to-date information about COVID-19 statistics in various countries. Users can view the number of cases, recoveries, and deaths globally and for specific countries. The app also includes a simple user authentication system, allowing users to register and log in to track their progress and view statistics.
 
 ## Table of Contents 📚
-- [Project Description](#project-description)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [User Authentication](#user-authentication)
-- [Navigation](#navigation)
-- [Contributing](#contributing)
-- [License](#license)
+## Table of Contents 📚
+- [Project Description](#project-description-📝)
+- [Features](#features-🚀)
+- [Technologies Used](#technologies-used-🛠️)
+- [Installation](#installation-⚙️)
+- [Usage](#usage-🔧)
+- [Contributing](#contributing-🤝)
+
 
 ## Project Description 📝
 
@@ -44,10 +43,34 @@ The **CoviTrack App** provides users with a user-friendly interface to track the
 - Simple navigation using `react-navigation` or `expo-router`.
 - After successful login, users are directed to the home page where their username is displayed in the top bar.
 
+## Technologies Used 🛠️
+ 
 ## Installation ⚙️
+
+**React Native: For building the cross-platform app.**
+**TypeScript: For strong typing and code maintainability.**
+**REST APIs: For fetching real-time COVID-19 data.**
+**Context API: For state management.**
+**React Navigation: For seamless app navigation.**
+**Chart Libraries: For data visualization.**
 
 Follow these steps to run the app locally:
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/Rajith-Singh/covid19_mobile_app.git
+
+## Usage 🔧
+
+**Register/Login: Sign up or log in to access personalized features.**
+**Track Data: Explore real-time statistics for any country or globally.**
+**Visualize Trends: View analytics and trends through charts.**
+
+## Contributing 🤝
+
+**Contributions are welcome! Please follow these steps:**
+
+Fork the repository.
+Create a feature branch.
+Commit your changes.
+Open a pull request.
